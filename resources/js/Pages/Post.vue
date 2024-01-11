@@ -1,5 +1,5 @@
 <template>
-  <h1>Hello posts</h1>
+  <h1>Hello posts. This is a Posts</h1>
   <p>{{ posts }}</p>
 </template>
 
