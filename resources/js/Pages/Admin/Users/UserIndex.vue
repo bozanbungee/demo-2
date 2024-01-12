@@ -6,17 +6,22 @@ import Table from "@/Components/Table.vue";
 import TableRow from "@/Components/TableRow.vue";
 import TableHeaderCell from "@/Components/TableHeaderCell.vue";
 import TableDataCell from "@/Components/TableDataCell.vue";
+import { Link } from "@inertiajs/vue3";
 
 defineProps(["users"]);
 </script>
 
 <template>
-  <Head title="User" />
+  <Head title="Users Index" />
 
   <AdminLayout>
+  
     <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
       <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-        <h1>User Index Page</h1>
+        <div class="flex justify-between">
+         <h1>User Index Page</h1>
+         <Link :href="route('users.create')" class="px-3 py-2 text-white font-semibold bg-indigo-500 hover:bg-indigo-700 rounded">New User</Link>
+       </div>
         <div class="mt-6">
           <Table>
             <template #header>
