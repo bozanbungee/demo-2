@@ -16,7 +16,7 @@ defineProps(["users"]);
 
   <AdminLayout>
   
-    <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+    <div class="max-w-7xl mx-auto my-10 sm:px-6 lg:px-8">
       <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
         <div class="flex justify-between">
          <h1>User Index Page</h1>
@@ -37,7 +37,10 @@ defineProps(["users"]);
                 <TableDataCell>{{ user.id }}</TableDataCell>
                 <TableDataCell>{{ user.name }}</TableDataCell>
                 <TableDataCell>{{ user.email }}</TableDataCell>
-                <TableDataCell>Edit/Delete</TableDataCell>
+                <TableDataCell>
+                  <Link :href="route('users.edit', user.id)" class="text-green-400 hover:text-green-600">Edit</Link> /
+                   <Link :href="route('users.destroy', user.id)" method="delete" as="button" class="text-red-400 hover:text-red-600">Delete</Link>
+                </TableDataCell>
               </TableRow>
             </template>
           </Table>
