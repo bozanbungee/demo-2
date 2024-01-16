@@ -3,16 +3,21 @@ import AdminLayout from "@/Layouts/AdminLayout.vue";
 import { Head } from "@inertiajs/vue3";
 import { Link } from "@inertiajs/vue3";
 import { useForm } from '@inertiajs/vue3';
-
+import VueMultiselect from "vue-multiselect";
 import Checkbox from '@/Components/Checkbox.vue';
 import InputError from '@/Components/InputError.vue';
 import InputLabel from '@/Components/InputLabel.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import TextInput from '@/Components/TextInput.vue';
 
+defineProps({
+  name: String,
+  permissions: Array,
+});
 
 const form = useForm( {
-    name: ""
+    name: "",
+    permissions: []
 });
 </script>
 
@@ -41,6 +46,18 @@ const form = useForm( {
 
                 <InputError class="mt-2" :message="form.errors.name" />
             </div>
+            <div class="mt-4">
+            <InputLabel for="permissions" value="Permissions" />
+            <VueMultiselect
+              v-model="form.permissions"
+              :options="permissions"
+              :multiple="true"
+              :close-on-select="true"
+              placeholder="Pick some permisions"
+              label="name"
+              track-by="id"
+            />
+          </div>
 
 
             <div class="flex items-center mt-4">
@@ -55,3 +72,4 @@ const form = useForm( {
    
   </AdminLayout>
 </template>
+<style src="vue-multiselect/dist/vue-multiselect.css"></style>

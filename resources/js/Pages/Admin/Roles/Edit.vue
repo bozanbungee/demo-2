@@ -13,6 +13,7 @@ import Table from "@/Components/Table.vue";
 import TableRow from "@/Components/TableRow.vue";
 import TableHeaderCell from "@/Components/TableHeaderCell.vue";
 import TableDataCell from "@/Components/TableDataCell.vue";
+import { onMounted, watch } from "vue";
 
 const props = defineProps({
   role: {
@@ -25,6 +26,12 @@ const form = useForm({
   name: props.role?.name,
   permissions: []
 });
+
+onMounted(() => {
+  form.permissions = props.role?.permissions
+});
+
+watch(() => props.role, () => (form.permissions = props.role?.permissions));
 </script>
 
 <template>
@@ -63,7 +70,7 @@ const form = useForm({
               :options="permissions"
               :multiple="true"
               :close-on-select="true"
-              placeholder="Pick some permiisions"
+              placeholder="Pick some permisions"
               label="name"
               track-by="id"
             />
@@ -91,11 +98,11 @@ const form = useForm({
               </TableRow>
             </template>
             <template #default>
-              <TableRow v-for="RolePermission in role.permissions" :key="RolePermission.id" class="border-t">
-                <TableDataCell>{{ RolePermission.id }}</TableDataCell>
-                <TableDataCell>{{ RolePermission.name }}</TableDataCell>
+              <TableRow v-for="rolePermission in role.permissions" :key="rolePermission.id" class="border-t">
+                <TableDataCell>{{ rolePermission.id }}</TableDataCell>
+                <TableDataCell>{{ rolePermission.name }}</TableDataCell>
                 <TableDataCell>
-                    <Link :href="route('permissions.destroy', RolePermission.id)" method="delete" as="button" class="text-red-400 hover:text-red-600">Revoke</Link>
+                    <Link :href="route('roles.permissions.destroy', [role.id, rolePermission.id])" method="delete" as="button" class="text-red-400 hover:text-red-600">Revoke</Link>
                 </TableDataCell>
               </TableRow>
             </template>

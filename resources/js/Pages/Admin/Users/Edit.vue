@@ -5,17 +5,27 @@ import InputLabel from "@/Components/InputLabel.vue";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
 import TextInput from "@/Components/TextInput.vue";
 import { Head, Link, useForm } from "@inertiajs/vue3";
+import VueMultiselect from "vue-multiselect";
+import Table from "@/Components/Table.vue";
+import TableRow from "@/Components/TableRow.vue";
+import TableHeaderCell from "@/Components/TableHeaderCell.vue";
+import TableDataCell from "@/Components/TableDataCell.vue";
+import { onMounted, watch } from "vue";
 
 const props = defineProps({
     user: {
         type: Object,
         required: true
-    }
+    },
+    roles: Array,
+    permissions: Array
 });
 
 const form = useForm({
   name: props.user?.name,
-  email: props.user?.email
+  email: props.user?.email,
+  roles:[],
+  permissions:[]
 });
 
 const submit = () => {
@@ -67,6 +77,31 @@ const submit = () => {
             <InputError class="mt-2" :message="form.errors.email" />
           </div>
 
+          <div class="mt-4">
+            <InputLabel for="roles" value="Roles" />
+            <VueMultiselect
+              v-model="form.roles"
+              :options="roles"
+              :multiple="true"
+              :close-on-select="true"
+              placeholder="Pick some role"
+              label="name"
+              track-by="id"
+            />
+          </div>
+          <div class="mt-4">
+            <InputLabel for="permissions" value="Permissions" />
+            <VueMultiselect
+              v-model="form.permissions"
+              :options="permissions"
+              :multiple="true"
+              :close-on-select="true"
+              placeholder="Pick some permissions"
+              label="name"
+              track-by="id"
+            />
+          </div>
+          
 
           <div class="flex items-center justify-end mt-4">
             <PrimaryButton
@@ -82,3 +117,4 @@ const submit = () => {
     </div>
   </AdminLayout>
 </template>
+<style src="vue-multiselect/dist/vue-multiselect.css"></style>

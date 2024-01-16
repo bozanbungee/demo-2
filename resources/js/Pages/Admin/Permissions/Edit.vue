@@ -9,6 +9,7 @@ import InputLabel from '@/Components/InputLabel.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import TextInput from '@/Components/TextInput.vue';
 
+
 const props = defineProps({
     permission: {
         type: Object,
@@ -32,7 +33,7 @@ const form = useForm( {
        </div>
          <div class="mt-6 max-w-md mx-auto bg-slate-100 shadow-lg rounded-lg p-3">
             <form @submit.prevent="form.put(route('permissions.update', permission.id))">
-            <div>
+            <div class="mt-4">
                 <InputLabel for="name" value="Name" />
 
                 <TextInput
@@ -46,6 +47,7 @@ const form = useForm( {
 
                 <InputError class="mt-2" :message="form.errors.name" />
             </div>
+          
 
 
             <div class="flex items-center mt-4">
