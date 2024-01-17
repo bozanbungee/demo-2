@@ -5,18 +5,31 @@ import InputLabel from "@/Components/InputLabel.vue";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
 import TextInput from "@/Components/TextInput.vue";
 import { Head, Link, useForm } from "@inertiajs/vue3";
+import VueMultiselect from "vue-multiselect";
+import Table from "@/Components/Table.vue";
+import TableRow from "@/Components/TableRow.vue";
+import TableHeaderCell from "@/Components/TableHeaderCell.vue";
+import TableDataCell from "@/Components/TableDataCell.vue";
+import { onMounted, watch } from "vue";
+
+const props = defineProps({
+    user: {
+        type: Object,
+        required: true
+    },
+    roles: Array,
+    permissions: Array
+});
 
 const form = useForm({
-  name: "",
-  email: "",
-  password: "",
-  password_confirmation: "",
+  name: props.user?.name,
+  email: props.user?.email,
+  roles:[],
+  permissions:[]
 });
 
 const submit = () => {
-  form.post(route("users.store"), {
-    onFinish: () => form.reset("password", "password_confirmation"),
-  });
+  form.put(route("users.update"), props.user?.id);
 };
 </script>
 
@@ -32,7 +45,7 @@ const submit = () => {
         >
       </div>
       <div class="max-w-md mx-auto mt-6 p-6 bg-slate-100">
-        <form @submit.prevent="submit">
+        <form @submit.prevent="form.put(route('users.update', user.id))">
           <div>
             <InputLabel for="name" value="Name" />
 
@@ -65,37 +78,30 @@ const submit = () => {
           </div>
 
           <div class="mt-4">
-            <InputLabel for="password" value="Password" />
-
-            <TextInput
-              id="password"
-              type="password"
-              class="mt-1 block w-full"
-              v-model="form.password"
-              required
-              autocomplete="new-password"
+            <InputLabel for="roles" value="Roles" />
+            <VueMultiselect
+              v-model="form.roles"
+              :options="roles"
+              :multiple="true"
+              :close-on-select="true"
+              placeholder="Pick some role"
+              label="name"
+              track-by="id"
             />
-
-            <InputError class="mt-2" :message="form.errors.password" />
           </div>
-
           <div class="mt-4">
-            <InputLabel for="password_confirmation" value="Confirm Password" />
-
-            <TextInput
-              id="password_confirmation"
-              type="password"
-              class="mt-1 block w-full"
-              v-model="form.password_confirmation"
-              required
-              autocomplete="new-password"
-            />
-
-            <InputError
-              class="mt-2"
-              :message="form.errors.password_confirmation"
+            <InputLabel for="permissions" value="Permissions" />
+            <VueMultiselect
+              v-model="form.permissions"
+              :options="permissions"
+              :multiple="true"
+              :close-on-select="true"
+              placeholder="Pick some permissions"
+              label="name"
+              track-by="id"
             />
           </div>
+          
 
           <div class="flex items-center justify-end mt-4">
             <PrimaryButton
@@ -103,7 +109,7 @@ const submit = () => {
               :class="{ 'opacity-25': form.processing }"
               :disabled="form.processing"
             >
-              Create User
+              Update User
             </PrimaryButton>
           </div>
         </form>
@@ -111,3 +117,4 @@ const submit = () => {
     </div>
   </AdminLayout>
 </template>
+<style src="vue-multiselect/dist/vue-multiselect.css"></style>
