@@ -13,24 +13,34 @@ import TableDataCell from "@/Components/TableDataCell.vue";
 import { onMounted, watch } from "vue";
 
 const props = defineProps({
-    user: {
-        type: Object,
-        required: true
-    },
-    roles: Array,
-    permissions: Array
+  user: {
+    type: Object,
+    required: true,
+  },
+  roles: Array,
+  permissions: Array,
 });
 
 const form = useForm({
   name: props.user?.name,
   email: props.user?.email,
-  roles:[],
-  permissions:[]
+  roles: [],
+  permissions: [],
 });
 
 const submit = () => {
   form.put(route("users.update"), props.user?.id);
 };
+
+onMounted(() => {
+  form.permissions = props.user?.permissions;
+  form.roles = props.user?.roles;
+});
+
+watch(() => props.user, () => {
+  form.permissions = props.user?.permissions,
+  form.roles = props.user?.roles
+  });
 </script>
 
 <template>
@@ -44,7 +54,7 @@ const submit = () => {
           >Back to the Users</Link
         >
       </div>
-      <div class="max-w-md mx-auto mt-6 p-6 bg-slate-100">
+      <div class="max-w-6xl mx-auto mt-6 p-6 bg-slate-100">
         <form @submit.prevent="form.put(route('users.update', user.id))">
           <div>
             <InputLabel for="name" value="Name" />
@@ -101,7 +111,6 @@ const submit = () => {
               track-by="id"
             />
           </div>
-          
 
           <div class="flex items-center justify-end mt-4">
             <PrimaryButton
@@ -113,6 +122,58 @@ const submit = () => {
             </PrimaryButton>
           </div>
         </form>
+      </div>
+      
+
+      <div class="mt-6">
+        <Table>
+          <template #header>
+            <TableRow>
+              <TableHeaderCell>ID</TableHeaderCell>
+              <TableHeaderCell>Name</TableHeaderCell>
+              <TableHeaderCell>Action</TableHeaderCell>
+            </TableRow>
+          </template>
+          <template #default>
+            <TableRow
+              v-for="userRole in user.roles"
+              :key="userRole.id"
+              class="border-t"
+            >
+              <TableDataCell>{{ userRole.id }}</TableDataCell>
+              <TableDataCell>{{ userRole.name }}</TableDataCell>
+              <TableDataCell>
+              
+                <Link :href="route('user.role.destroy', [user.id, userRole.id])" method="delete" as="button" class="text-red-400 hover:text-red-600">Revoke</Link>
+              </TableDataCell>
+            </TableRow>
+          </template>
+        </Table>
+      </div>
+
+      <div class="mt-6">
+        <Table>
+          <template #header>
+            <TableRow>
+              <TableHeaderCell>ID</TableHeaderCell>
+              <TableHeaderCell>Name</TableHeaderCell>
+              <TableHeaderCell>Action</TableHeaderCell>
+            </TableRow>
+          </template>
+          <template #default>
+            <TableRow
+              v-for="userPermission in user.permissions"
+              :key="userPermission.id"
+              class="border-t"
+            >
+              <TableDataCell>{{ userPermission.id }}</TableDataCell>
+              <TableDataCell>{{ userPermission.name }}</TableDataCell>
+              <TableDataCell>
+                <Link :href="route('user.permission.destroy', [user.id, userPermission.id])" method="delete" as="button" class="text-red-400 hover:text-red-600">Revoke</Link>
+              </TableDataCell>
+            </TableRow>
+          </template>
+        </Table>
       </div>
     </div>
   </AdminLayout>

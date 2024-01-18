@@ -4,6 +4,8 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RevokePermissionFromRoleConntroller;
+use App\Http\Controllers\RevokePermissionFromUserController;
+use App\Http\Controllers\RevokeRoleFromUserController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
 use Illuminate\Foundation\Application;
@@ -34,7 +36,12 @@ Route::get('/', function () {
 Route::resource('/users', UserController::class);
 Route::resource('/roles', RoleController::class);
 Route::resource('/permissions', PermissionController::class);
-Route::delete('/roles/{role}/permissions/{permission}', RevokePermissionFromRoleConntroller::class)->name('roles.permissions.destroy');
+Route::delete('/roles/{role}/permissions/{permission}', RevokePermissionFromRoleConntroller::class)
+->name('roles.permissions.destroy');
+Route::delete('/user/{user}/role/{role}', RevokeRoleFromUserController::class)
+->name('user.role.destroy');
+Route::delete('/user/{user}/permission/{permission}', RevokePermissionFromUserController::class)
+->name('user.permission.destroy');
 
 Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');

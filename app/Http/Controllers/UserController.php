@@ -23,6 +23,7 @@ class UserController extends Controller
      */
     public function index():Response
     {
+   
         return Inertia::render('Admin/Users/UserIndex', ['users' => UserResource::collection(User::all())]);
     }
 
@@ -67,6 +68,8 @@ class UserController extends Controller
      */
     public function edit(User $user): Response
     {
+        $user->load(['roles', 'permissions']);
+   
         return Inertia::render('Admin/Users/Edit', [
             'user' => new UserResource($user),
             'roles' => RoleResource::collection(Role::all()),
@@ -82,6 +85,8 @@ class UserController extends Controller
         $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|string|lowercase|email|max:255|'.Rule::unique('users', 'email')->ignore($user),
+            'roles' => ['sometimes', 'array'],
+            'permissions' => ['sometimes', 'array']
            ]);
 
         $user->update([
@@ -89,7 +94,10 @@ class UserController extends Controller
             'email' => $request->email
         ]);
 
-        return to_route('users.index');
+        $user->syncRoles($request->input('roles.*.name'));
+        $user->syncPermissions($request->input('permissions.*.name'));
+
+        return back();
     }
 
     /**
