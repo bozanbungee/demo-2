@@ -19,7 +19,8 @@ class PostFactory extends Factory
         return [
             'title' => fake(locale:'es_ES')->title(),
             'content' =>fake(locale:'en_EN')->sentence(3),
-            'created_at' => fake()->unixTime()
+            'created_at' => fake()->unixTime(),
+            'updated_at' => fake()->unixTime()
         ];
     }
 }

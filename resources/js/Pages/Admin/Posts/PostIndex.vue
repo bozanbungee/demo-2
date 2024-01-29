@@ -63,14 +63,20 @@ import SecondaryButton from "@/Components/SecondaryButton.vue";
 defineProps(["posts"]);
 const form = useForm({});
 
-const showConfirmDeletedModal = ref(false);
+const showConfirmDeletePostModal = ref(false);
 
 const confirmDeletePost = () => {
-  showConfirmDeletedModal.value = true;
+  showConfirmDeletePostModal.value = true;
 };
 
 const closeModal = () => {
-  showConfirmDeletedModal.value = false;
+  showConfirmDeletePostModal.value = false;
+};
+
+const deletePost= (id) => {
+  form.delete(route("post.destroy", id), {
+    onSuccess: () => closeModal(),
+  });
 };
 
 
@@ -96,36 +102,56 @@ const closeModal = () => {
               </TableRow>
             </template>
             <template #default>
-              <TableRow v-for="post in posts" :key="post.id" class="border-t">
-                <TableDataCell>{{ post.id }}</TableDataCell>
-                <TableDataCell>{{ post.title }}</TableDataCell>
-                <TableDataCell>{{ post.content }}</TableDataCell>
-                <TableDataCell>
-                 /
-                  <button
-                    class="text-red-400 hover:text-green-600"
-                    @click="confirmDeletePost"
-                  >
-                    delete
-                  </button>
-                  <Modal :show="showConfirmDeletedModal" @close="closeModal">
-                    <div class="p-6">
-                      <h2 class="text-lg font-semibold text-slate-800">
-                        Are you shore whant to delete post ?
-                      </h2>
-                      <div class="mt-6 flex space-x-4">
-                        <DangerButton @click="deletePost(post.id)"
-                          >Delete</DangerButton
+                        <TableRow
+                            v-for="post in posts"
+                            :key="post.id"
+                            class="border-b"
                         >
-                        <SecondaryButton @click="closeModal"
-                          >Cancel</SecondaryButton
-                        >
-                      </div>
-                    </div>
-                  </Modal>
-                </TableDataCell>
-              </TableRow>
-            </template>
+                            <TableDataCell>{{ post.id }}</TableDataCell>
+                            <TableDataCell>{{ post.title }}</TableDataCell>
+                            <TableDataCell>{{ post.content }}</TableDataCell>
+                            <TableDataCell class="space-x-4">
+                               
+                                    <Link
+                                        :href="route('post.edit', post.id)"
+                                        class="text-green-400 hover:text-green-600"
+                                        >Edit</Link
+                                    >
+                               
+                                
+                                    <button
+                                    
+                                        @click="confirmDeletePost"
+                                        class="text-red-400 hover:text-red-600"
+                                    >
+                                        Delete
+                                    </button>
+                               
+
+                                <Modal
+                                    :show="showConfirmDeletePostModal"
+                                    @close="closeModal" :id="4"
+                                >
+                                    <div class="p-6">
+                                        <h2
+                                            class="text-lg font-semibold text-slate-800"
+                                        >
+                                            Are you sure to delete this Role {{post}}?
+                                        </h2>
+                                        <div class="mt-6 flex space-x-4">
+                                            <DangerButton
+                                                @click="$event => deletePost(post.id)"
+                                                >Delete</DangerButton
+                                            >
+                                            <SecondaryButton @click="closeModal"
+                                                >Cancel</SecondaryButton
+                                            >
+                                        </div>
+                                    </div>
+                                </Modal>
+                            </TableDataCell>
+                        </TableRow>
+                    </template>
           </Table>
         </div>
       </div>
