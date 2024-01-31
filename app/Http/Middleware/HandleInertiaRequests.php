@@ -35,10 +35,13 @@ class HandleInertiaRequests extends Middleware
     {
         return [
             ...parent::share($request),
-            'auth.user' => fn () => $request->user()
+            'auth.user' => fn() => $request->user()
                 ? new UserSheredResource($request->user())
                 : null,
-            'ziggy' => fn () => [
+            'lang' => fn() => [
+                app()->getLocale()
+            ],
+            'ziggy' => fn() => [
                 ...(new Ziggy)->toArray(),
                 'location' => $request->url(),
             ],

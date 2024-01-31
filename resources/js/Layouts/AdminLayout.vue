@@ -18,7 +18,8 @@ const showingNavigationDropdown = ref(false);
     >
       <div>
         <div class="-mx-6 px-6 py-4">
-          {{ $page.props.auth.user }}
+          {{ $page.props.auth.user.name }} <br/>
+          {{ $page.props.auth.user.permissions }}
         </div>
 
         <div class="mt-8 text-center">

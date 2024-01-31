@@ -14,6 +14,8 @@ use Inertia\Response;
 
 class PostController extends Controller
 {
+
+  
   public function index(): Response
   {
     $posts = PostResource::collection(Post::all());
@@ -26,6 +28,7 @@ class PostController extends Controller
 
   public function create(): Response
   {
+    $this->authorize('create', Post::class);
     return Inertia::render('Admin/Posts/Create');
   }
 

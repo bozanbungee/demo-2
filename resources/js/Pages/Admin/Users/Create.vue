@@ -4,7 +4,8 @@ import InputError from "@/Components/InputError.vue";
 import InputLabel from "@/Components/InputLabel.vue";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
 import TextInput from "@/Components/TextInput.vue";
-import { Head, Link, useForm } from "@inertiajs/vue3";
+import { Head, Link, useForm, usePage } from "@inertiajs/vue3";
+import { computed } from "vue";
 
 const form = useForm({
   name: "",
@@ -13,11 +14,25 @@ const form = useForm({
   password_confirmation: "",
 });
 
+const lang = computed(() => usePage().props.lang);
+
 const submit = () => {
   form.post(route("users.store"), {
     onFinish: () => form.reset("password", "password_confirmation"),
   });
 };
+const trans = {
+    en: {
+        hello: "Hello",
+        name: "Name"
+    },
+    bg: {
+        hello: "Здравейте",
+        name: "Име"
+    },
+};
+
+
 </script>
 
 <template>
@@ -28,20 +43,22 @@ const submit = () => {
         <Link
           :href="route('users.index')"
           class="px-3 py-2 text-white font-semibold bg-indigo-500 hover:bg-indigo-700 rounded"
-          >Back to the Users</Link
+          >Back to the Users </Link
         >
+        {{ trans[lang] }}
       </div>
       <div class="max-w-md mx-auto mt-6 p-6 bg-slate-100">
         <form @submit.prevent="submit">
           <div>
-            <InputLabel for="name" value="Name" />
+           
+            <InputLabel for="name" :value="trans[lang].name"/>
 
             <TextInput
               id="name"
               type="text"
               class="mt-1 block w-full"
               v-model="form.name"
-              required
+              
               autofocus
               autocomplete="name"
             />
@@ -57,7 +74,7 @@ const submit = () => {
               type="email"
               class="mt-1 block w-full"
               v-model="form.email"
-              required
+              
               autocomplete="username"
             />
 
@@ -72,7 +89,7 @@ const submit = () => {
               type="password"
               class="mt-1 block w-full"
               v-model="form.password"
-              required
+              
               autocomplete="new-password"
             />
 
@@ -87,7 +104,7 @@ const submit = () => {
               type="password"
               class="mt-1 block w-full"
               v-model="form.password_confirmation"
-              required
+              
               autocomplete="new-password"
             />
 

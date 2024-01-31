@@ -51,6 +51,7 @@ export default {
 <script setup>
 import AdminLayout from "@/Layouts/AdminLayout.vue";
 import { Head, Link, useForm } from "@inertiajs/vue3";
+import { usePermission } from "@/Composables/permissions";
 import Table from "@/Components/Table.vue";
 import TableRow from "@/Components/TableRow.vue";
 import TableHeaderCell from "@/Components/TableHeaderCell.vue";
@@ -63,6 +64,7 @@ import SecondaryButton from "@/Components/SecondaryButton.vue";
 defineProps(["posts"]);
 const form = useForm({});
 
+const { hasPermission } = usePermission();
 const showConfirmDeletePostModal = ref(false);
 
 const confirmDeletePost = () => {
@@ -89,8 +91,10 @@ const deletePost= (id) => {
     <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
       <div class="flex justify-between">
          <h1>Post Index Page</h1>
+         <template v-if="hasPermission('Create Post')">
          <Link :href="route('post.create')" class="px-3 py-2 text-white font-semibold bg-indigo-500 hover:bg-indigo-700 rounded">New Post</Link>
-       </div>
+        </template>
+        </div>
          <div class="mt-6">
           <Table>
             <template #header>
@@ -111,14 +115,15 @@ const deletePost= (id) => {
                             <TableDataCell>{{ post.title }}</TableDataCell>
                             <TableDataCell>{{ post.content }}</TableDataCell>
                             <TableDataCell class="space-x-4">
-                               
+                              <template v-if="hasPermission('Edit Post')">
                                     <Link
                                         :href="route('post.edit', post.id)"
                                         class="text-green-400 hover:text-green-600"
                                         >Edit</Link
                                     >
+                                    </template>
                                
-                                
+                                    <template v-if="hasPermission('Delete Post')">
                                     <button
                                     
                                         @click="confirmDeletePost"
@@ -126,6 +131,7 @@ const deletePost= (id) => {
                                     >
                                         Delete
                                     </button>
+                                    </template>
                                
 
                                 <Modal
@@ -139,6 +145,7 @@ const deletePost= (id) => {
                                             Are you sure to delete this Role {{post}}?
                                         </h2>
                                         <div class="mt-6 flex space-x-4">
+                                          
                                             <DangerButton
                                                 @click="$event => deletePost(post.id)"
                                                 >Delete</DangerButton
