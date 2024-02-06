@@ -29,7 +29,7 @@ class PostPolicy
      */
     public function create(User $user): bool
     {
-       return $user->hasPermissionTo(['Create Post']) ? true : false;
+       return $user->hasPermissionTo('Create Post') ? true : false;
     }
 
     /**

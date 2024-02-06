@@ -41,6 +41,7 @@ class HandleInertiaRequests extends Middleware
             'lang' => fn() => [
                 app()->getLocale()
             ],
+            'locales' => fn() => config('localization.locales'),
             'ziggy' => fn() => [
                 ...(new Ziggy)->toArray(),
                 'location' => $request->url(),

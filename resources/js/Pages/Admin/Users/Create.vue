@@ -7,6 +7,8 @@ import TextInput from "@/Components/TextInput.vue";
 import { Head, Link, useForm, usePage } from "@inertiajs/vue3";
 import { computed } from "vue";
 
+
+
 const form = useForm({
   name: "",
   email: "",
