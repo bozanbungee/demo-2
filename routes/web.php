@@ -51,7 +51,7 @@ Route::middleware(Localization::class)
     Route::delete('/user/{user}/permission/{permission}', RevokePermissionFromUserController::class)
     ->name('user.permission.destroy');
     
-    Route::get('/dashboard', function () {
+    Route::get('/dashboard', function () { 
         return Inertia::render('Dashboard');
     })->middleware(['auth', 'verified'])->name('dashboard');
     
